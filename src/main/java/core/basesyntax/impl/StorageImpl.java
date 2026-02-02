@@ -16,18 +16,23 @@ public class StorageImpl<K, V> implements Storage<K, V> {
 
     @Override
     public void put(K key, V value) {
-        if (indexHelper(key) == -1) {
-            this.keyArray[sizeValue] = key;
-            this.valueArray[sizeValue] = value;
-            sizeValue++;
+        int index = indexHelper(key);
+        if (index == -1) {
+            if (sizeValue < 9) {
+                this.keyArray[sizeValue] = key;
+                this.valueArray[sizeValue] = value;
+                sizeValue++;
+            }
+        } else {
+            this.keyArray[index] = key;
+            this.valueArray[index] = value;
         }
-        this.keyArray[indexHelper(key)] = key;
-        this.valueArray[indexHelper(key)] = value;
     }
 
     @Override
     public V get(K key) {
-        return indexHelper(key) == -1 ? null : (V) this.valueArray[indexHelper(key)];
+        int index = indexHelper(key);
+        return index == -1 ? null : (V) this.valueArray[index];
     }
 
     @Override
